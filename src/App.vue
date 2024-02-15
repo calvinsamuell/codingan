@@ -30,7 +30,7 @@ export default{
     }
   },
   mounted(){
-    this.todos = JSON.parse(localStorage.getItem('todos'))
+    this.todo = JSON.parse(localStorage.getItem('todo'))
   },
   computed:{
     totalTODO(){
