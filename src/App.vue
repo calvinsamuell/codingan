@@ -9,6 +9,7 @@
           </div>
           <div class="col-2">
             <button class="btn btn-success" @click="add">ADD</button>
+            <button class="btn btn-success" @click="search">Search</button>
           </div>
         </div>
         <list :todos="todos" @deleteTODO="deleteTODO" @doneTodo="doneTodo"/>
@@ -26,7 +27,9 @@ export default{
   data(){
     return{
       todo: "",
-      todos: []
+      todos: [],
+      activityList: []
+      
     }
   },
   mounted(){
@@ -38,13 +41,24 @@ export default{
     }
   },
   methods:{
+    
     add(){
+      if(this.todo != '' && this.todo != null && !this.activityList.includes(this.todo)){
+      this.activityList.push(this.todo)
       this.todos.unshift({
         activity: this.todo,
         isDone: false
-      });
+        });
       this.todo ="";
       this.saveToLocalStorage();
+      }
+    },
+    search(){
+      if(this.activityList.includes(this.todo)){
+        window.alert('Data ditemukan')
+      }else{
+        window.alert('Data tidak ditemukan')
+      }
     },
     deleteTODO(todoIndex){
       this.todos = this.todos.filter((item,index) =>{
