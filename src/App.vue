@@ -10,9 +10,10 @@
           <div class="col-2">
             <button class="btn btn-success" @click="add">ADD</button>
             <button class="btn btn-success" @click="search">Search</button>
+            <button class="btn btn-success" @click="reset">Reset</button>
           </div>
         </div>
-        <list :todos="todos" @deleteTODO="deleteTODO" @doneTodo="doneTodo"/>
+        <list :todos="filteredTodos" @deleteTODO="deleteTODO" @doneTodo="doneTodo"/>
         <br/>
         <small>Total TODO : {{ totalTODO }}</small>
       </div>
@@ -27,9 +28,9 @@ export default{
   data(){
     return{
       todo: "",
+      searchText: "",
       todos: [],
       activityList: []
-      
     }
   },
   mounted(){
@@ -38,27 +39,33 @@ export default{
   computed:{
     totalTODO(){
       return this.todos.length;
+    },
+    filteredTodos() {
+      if (this.searchText) {
+        return this.todos.filter(todo => todo.activity.includes(this.searchText));
+      } else {
+        return this.todos; 
+      }
     }
   },
   methods:{
-    
     add(){
+      console.log(this.todos)
       if(this.todo != '' && this.todo != null && !this.activityList.includes(this.todo)){
-      this.activityList.push(this.todo)
-      this.todos.unshift({
-        activity: this.todo,
-        isDone: false
+        this.activityList.push(this.todo)
+        this.todos.unshift({
+          activity: this.todo,
+          isDone: false
         });
-      this.todo ="";
-      this.saveToLocalStorage();
+        this.todo ="";
+        this.saveToLocalStorage();
       }
     },
     search(){
-      if(this.activityList.includes(this.todo)){
-        window.alert('Data ditemukan')
-      }else{
-        window.alert('Data tidak ditemukan')
-      }
+      this.searchText = this.todo;
+    },
+    reset() {
+      this.searchText = ''; 
     },
     deleteTODO(todoIndex){
       this.todos = this.todos.filter((item,index) =>{
@@ -82,7 +89,5 @@ export default{
       localStorage.setItem('todos', JSON.stringify(this.todos))
     }
   }
-
 }
 </script>
-
